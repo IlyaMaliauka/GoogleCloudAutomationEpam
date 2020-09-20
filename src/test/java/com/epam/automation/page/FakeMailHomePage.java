@@ -1,5 +1,6 @@
 package com.epam.automation.page;
 
+import com.epam.automation.model.User;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -24,6 +25,12 @@ public class FakeMailHomePage {
     @FindBy(xpath = "//input[@ng-model='emailQuote.user.email']")
     private WebElement emailInput;
 
+    @FindBy(xpath = "//input[@ng-model='emailQuote.user.firstname']")
+    private WebElement firstNameInput;
+
+    @FindBy(xpath = "//input[@ng-model='emailQuote.user.lastname']")
+    private WebElement lastNameInput;
+
     @FindBy(xpath = "//button[@ng-disabled='emailForm.$invalid']")
     private WebElement sendEmailButton;
 
@@ -42,14 +49,13 @@ public class FakeMailHomePage {
         return elements[4];
     }
 
-    public FakeMailHomePage sendPricingOnFakeEmail() {
+    public FakeMailHomePage sendPricingOnFakeEmail(User user) {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
         jse.executeScript("window.open('https://10minutemail.com/');");
 
         ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(1));
         copyEmailButton.click();
-
         driver.switchTo().window(tabs2.get(0));
         jse.executeScript("scroll(0, 1500);");
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
@@ -57,6 +63,8 @@ public class FakeMailHomePage {
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@ng-model='emailQuote.user.email']")));
         emailInput.sendKeys(Keys.LEFT_CONTROL, "v");
+        firstNameInput.sendKeys(user.getFirstName());
+        lastNameInput.sendKeys(user.getLastName());
         sendEmailButton.click();
 
         driver.switchTo().window(tabs2.get(1));

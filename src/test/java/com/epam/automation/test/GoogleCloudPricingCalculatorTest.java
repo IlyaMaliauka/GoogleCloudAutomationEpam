@@ -1,10 +1,14 @@
 package com.epam.automation.test;
 
+import com.epam.automation.driver.DriverSingleton;
+import com.epam.automation.model.User;
 import com.epam.automation.page.FakeMailHomePage;
 import com.epam.automation.page.GoogleCloudHomePage;
+import com.epam.automation.service.UserCreator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -14,19 +18,20 @@ public class GoogleCloudPricingCalculatorTest {
 
     @BeforeMethod(alwaysRun = true)
     public void browserSetup() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+
+        driver = DriverSingleton.getDriver();
 
     }
 
     @Test()
     public void testCalculatedPricingEqualsEmailedPricing() {
+        User testUser = UserCreator.withCredentialsFromProperty();
         FakeMailHomePage getPricing = new GoogleCloudHomePage(driver)
                 .openPage()
                 .searchForCalculator("pricing calculator")
-                .estimatePricing();
+                .estimatePricing(testUser);
         String calculatedPrice = getPricing.findGoogleCloudCalculatorPrice();
-        getPricing.sendPricingOnFakeEmail();
+        getPricing.sendPricingOnFakeEmail(testUser);
         String emailedPrice = getPricing.findEmailedPrice();
 
         Assert.assertEquals(calculatedPrice, emailedPrice);
@@ -35,8 +40,7 @@ public class GoogleCloudPricingCalculatorTest {
 
 //        @AfterMethod(alwaysRun = true)
 //    public void browserTearDown() {
-//            driver.quit();
-//            driver = null;
+//            DriverSingleton.closeDriver();
 //        }
 
 }

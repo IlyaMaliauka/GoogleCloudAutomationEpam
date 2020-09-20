@@ -1,6 +1,10 @@
 package com.epam.automation.page;
 
-import org.openqa.selenium.*;
+import com.epam.automation.model.User;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -46,6 +50,18 @@ public class PricingCalculatorPage {
     @FindBy(xpath = "//*[@id='select_option_93']")
     private WebElement selectOneYear;
 
+    @FindBy(xpath = "//md-select[@ng-model='listingCtrl.computeServer.location']")
+    private WebElement datacenterLocationSelect;
+
+    @FindBy(xpath = "//*[@id='select_option_204']")
+    private WebElement selectEU3;
+
+    @FindBy(xpath = "//*[@id='select_option_199']")
+    private WebElement selectUSWEST2;
+
+    @FindBy(xpath = "//*[@id='select_option_202']")
+    private WebElement selectEUWEST1;
+
     @FindBy(xpath = "//button[@aria-label='Add to Estimate']")
     private WebElement estimateButton;
 
@@ -58,14 +74,14 @@ public class PricingCalculatorPage {
         PageFactory.initElements(driver, this);
     }
 
-    public FakeMailHomePage estimatePricing() {
+    public FakeMailHomePage estimatePricing(User user) {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
 
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("input_60")));
-        numberOfInstancesInput.sendKeys("4");
-       // jse.executeScript("scroll(0, 1050);");
+        numberOfInstancesInput.sendKeys(user.getDesiredInstancesNumber());
+        // jse.executeScript("scroll(0, 1050);");
         machineTypeSelectButton.click();
         try {
             Thread.sleep(3000);
@@ -86,7 +102,25 @@ public class PricingCalculatorPage {
         }
         select2x375GB.click();
 
-       // jse.executeScript("scroll(0, 5000);");
+        datacenterLocationSelect.click();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        switch (user.getRegion()) {
+            case "Europe":
+                selectEU3.click();
+                break;
+            case "United States":
+                selectUSWEST2.click();
+                break;
+            default:
+                selectEUWEST1.click();
+
+        }
+
+        // jse.executeScript("scroll(0, 5000);");
         committedUsageSelect.click();
         selectOneYear.click();
 
