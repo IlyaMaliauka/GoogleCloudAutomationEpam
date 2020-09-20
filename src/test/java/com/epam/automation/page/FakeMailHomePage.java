@@ -1,6 +1,8 @@
 package com.epam.automation.page;
 
 import com.epam.automation.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public class FakeMailHomePage {
 
     private WebDriver driver;
+    private final Logger logger = LogManager.getRootLogger();
 
     @FindBy(xpath = "//*[@id='cloud-site']/devsite-iframe/iframe")
     private WebElement firstFrame;
@@ -57,7 +60,6 @@ public class FakeMailHomePage {
         driver.switchTo().window(tabs2.get(1));
         copyEmailButton.click();
         driver.switchTo().window(tabs2.get(0));
-        jse.executeScript("scroll(0, 1500);");
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
 
         new WebDriverWait(driver, 10)
@@ -66,9 +68,9 @@ public class FakeMailHomePage {
         firstNameInput.sendKeys(user.getFirstName());
         lastNameInput.sendKeys(user.getLastName());
         sendEmailButton.click();
+        logger.info("Email with pricing sent to 10-minute mail");
 
         driver.switchTo().window(tabs2.get(1));
-        jse.executeScript("scroll(0, 500);");
         new WebDriverWait(driver, 60)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Google Cloud Platform Price Estimate']")));
         emailWithPricingButton.click();

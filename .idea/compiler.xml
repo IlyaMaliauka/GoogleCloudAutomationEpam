@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="GoogleCloudAutomationEpam" target="1.7" />
+      <module name="GoogleCloudAutomationEpam" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

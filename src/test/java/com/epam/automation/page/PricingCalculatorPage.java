@@ -1,6 +1,8 @@
 package com.epam.automation.page;
 
 import com.epam.automation.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PricingCalculatorPage {
 
     private WebDriver driver;
+    private final Logger logger = LogManager.getRootLogger();
 
     @FindBy(xpath = "//*[@id='cloud-site']/devsite-iframe/iframe")
     private WebElement firstFrame;
@@ -81,7 +84,6 @@ public class PricingCalculatorPage {
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("input_60")));
         numberOfInstancesInput.sendKeys(user.getDesiredInstancesNumber());
-        // jse.executeScript("scroll(0, 1050);");
         machineTypeSelectButton.click();
         try {
             Thread.sleep(3000);
@@ -120,12 +122,12 @@ public class PricingCalculatorPage {
 
         }
 
-        // jse.executeScript("scroll(0, 5000);");
         committedUsageSelect.click();
         selectOneYear.click();
 
         estimateButton.click();
         emailEstimateButton.click();
+        logger.info("Google Cloud Service pricing calculated");
 
         return new FakeMailHomePage(driver);
     }

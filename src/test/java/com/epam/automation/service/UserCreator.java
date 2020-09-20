@@ -4,12 +4,15 @@ import com.epam.automation.model.User;
 
 public class UserCreator {
 
-    public static final String USER_FIRST_NAME = "Ilya";
-    public static final String USER_LAST_NAME = "Maliauka";
-    public static final String USER_DESIRED_INSTANCES_NUMBER = "4";
-    public static final String USER_REGION = "Europe";
+    public static final String TESTDATA_USER_FIRST_NAME = "testdata.user.firstName";
+    public static final String TESTDATA_USER_LAST_NAME = "testdata.user.lastName";
+    public static final String TESTDATA_USER_DESIRED_INSTANCES_NUMBER = "testdata.user.instancesNumber";
+    public static final String TESTDATA_USER_REGION = "testdata.user.region";
 
     public static User withCredentialsFromProperty() {
-        return new User(USER_REGION, USER_DESIRED_INSTANCES_NUMBER, USER_FIRST_NAME, USER_LAST_NAME);
+        return new User(TestDataReader.getTestData(TESTDATA_USER_REGION),
+                TestDataReader.getTestData(TESTDATA_USER_DESIRED_INSTANCES_NUMBER),
+                TestDataReader.getTestData(TESTDATA_USER_FIRST_NAME),
+                TestDataReader.getTestData(TESTDATA_USER_LAST_NAME));
     }
 }
