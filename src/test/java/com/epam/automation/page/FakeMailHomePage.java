@@ -79,6 +79,11 @@ public class FakeMailHomePage {
     }
 
     public String findEmailedPrice() {
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String emailResult = driver.findElement(By.xpath("//*[@id='mobilepadding']/td/h2")).getText();
         String[] emailElements = emailResult.split(" ");
 
