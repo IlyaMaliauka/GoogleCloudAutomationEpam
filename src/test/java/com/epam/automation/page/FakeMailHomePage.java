@@ -22,9 +22,9 @@ public class FakeMailHomePage {
     @FindBy(id = "myFrame")
     private WebElement secondFrame;
 
-    @FindBy(xpath = "//*[@id='copy_address']/span")
+    @FindBy(xpath = "/html/body/div[1]/div/div/div[2]/div[1]/form/div[2]")
     private WebElement copyEmailButton;
-
+    //*[@id='copy_address']/span
     @FindBy(xpath = "//input[@ng-model='emailQuote.user.email']")
     private WebElement emailInput;
 
@@ -37,7 +37,7 @@ public class FakeMailHomePage {
     @FindBy(xpath = "//button[@ng-disabled='emailForm.$invalid']")
     private WebElement sendEmailButton;
 
-    @FindBy(xpath = "//*[text()='Google Cloud Platform Price Estimate']")
+    @FindBy(xpath = "//a[text()='Google Cloud Platform Price Estimate']")
     private WebElement emailWithPricingButton;
 
     public FakeMailHomePage(WebDriver driver) {
@@ -54,20 +54,15 @@ public class FakeMailHomePage {
 
     public FakeMailHomePage sendPricingOnFakeEmail(User user) {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
-        jse.executeScript("window.open('https://10minutemail.com/');");
+        jse.executeScript("window.open('https://10minemail.com/');");
 
         ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(1));
-        driver.manage().window().maximize();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         copyEmailButton.click();
         logger.info("copy email button clicked");
         driver.switchTo().window(tabs2.get(0));
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
+
 
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@ng-model='emailQuote.user.email']")));
@@ -78,8 +73,9 @@ public class FakeMailHomePage {
         logger.info("Email with pricing sent to 10-minute mail");
 
         driver.switchTo().window(tabs2.get(1));
+        jse.executeScript("window.scrollBy(0,450)");
         new WebDriverWait(driver, 60)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Google Cloud Platform Price Estimate']")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Google Cloud Platform Price Estimate']")));
         emailWithPricingButton.click();
 
         return this;

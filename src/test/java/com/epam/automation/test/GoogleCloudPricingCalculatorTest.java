@@ -41,9 +41,9 @@ public class GoogleCloudPricingCalculatorTest {
     }
 
 
-        @AfterMethod(alwaysRun = true)
-    public void browserTearDown() {
-            DriverSingleton.closeDriver();
-        }
+//        @AfterMethod(alwaysRun = true)
+//    public void browserTearDown() {
+//            DriverSingleton.closeDriver();
+//        }
 
 }
