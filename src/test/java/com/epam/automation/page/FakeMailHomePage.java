@@ -59,6 +59,7 @@ public class FakeMailHomePage {
         ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(1));
         copyEmailButton.click();
+        logger.info("copy email button clicked");
         driver.switchTo().window(tabs2.get(0));
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
 
