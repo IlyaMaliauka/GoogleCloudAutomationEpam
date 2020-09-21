@@ -58,7 +58,7 @@ public class FakeMailHomePage {
 
         ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(1));
-        driver.navigate().refresh();
+        driver.manage().window().maximize();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
