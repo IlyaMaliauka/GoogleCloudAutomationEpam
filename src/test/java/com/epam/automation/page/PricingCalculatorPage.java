@@ -26,32 +26,8 @@ public class PricingCalculatorPage {
     @FindBy(id = "input_60")
     private WebElement numberOfInstancesInput;
 
-    @FindBy(xpath = "//md-select[@ng-model='listingCtrl.computeServer.instance']")
-    private WebElement machineTypeSelectButton;
-
-    @FindBy(xpath = "//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-8']")
-    private WebElement standart8option;
-
     @FindBy(xpath = "//md-checkbox[@aria-label='Add GPUs']")
     private WebElement addGPUsCheckbox;
-
-    @FindBy(xpath = "//*[@id='select_value_label_371']")
-    private WebElement selectGPUType;
-
-    @FindBy(xpath = "//*[@id='select_option_385']")
-    private WebElement selectTESLAT4;
-
-    @FindBy(xpath = "//*[@id='select_value_label_192']")
-    private WebElement selectSSD;
-
-    @FindBy(xpath = "//*[@id='select_option_257']")
-    private WebElement select2x375GB;
-
-    @FindBy(xpath = "//*[@id='select_value_label_59']")
-    private WebElement committedUsageSelect;
-
-    @FindBy(xpath = "//*[@id='select_option_93']")
-    private WebElement selectOneYear;
 
     @FindBy(xpath = "//md-select[@ng-model='listingCtrl.computeServer.location']")
     private WebElement datacenterLocationSelect;
@@ -77,6 +53,41 @@ public class PricingCalculatorPage {
         PageFactory.initElements(driver, this);
     }
 
+    private void selectDataCenter(String region) {
+        specifyOptionFromDropDownList(driver.findElement(By.xpath("//md-select[@ng-model='listingCtrl.computeServer.location']")), region);
+    }
+
+    private void selectGPUType(String GPUType) {
+        specifyOptionFromDropDownList(driver.findElement(By.xpath("//*[@id='select_value_label_371']")), GPUType);
+    }
+
+    private void selectMachineType(String machineType) {
+        specifyOptionFromDropDownList(driver.findElement(By.xpath("//md-select[@ng-model='listingCtrl.computeServer.instance']")), machineType);
+    }
+
+    private void selectLocalSSD(String localSSD) {
+        specifyOptionFromDropDownList(driver.findElement(By.id("select_value_label_192")), localSSD);
+    }
+
+    private void specifyOptionFromDropDownList(WebElement dropDownList, String option) {
+        waitVisibilityOf(dropDownList);
+        clickThroughJS(dropDownList);
+
+        String xpath = String.format("//md-select-menu//md-option//div[contains(text(), '%s')]", option);
+        WebElement specifiedOption = driver.findElement(By.xpath(xpath));
+
+        waitVisibilityOf(specifiedOption);
+        clickThroughJS(specifiedOption);
+    }
+
+    private void waitVisibilityOf(WebElement webElement) {
+        new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(webElement));
+    }
+
+    private void clickThroughJS(WebElement webElement) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", webElement);
+    }
+
     public FakeMailHomePage estimatePricing(User user) {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
@@ -84,46 +95,32 @@ public class PricingCalculatorPage {
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("input_60")));
         numberOfInstancesInput.sendKeys(user.getDesiredInstancesNumber());
-        machineTypeSelectButton.click();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        standart8option.click();
+       selectMachineType("n1-standard-8");
 
         addGPUsCheckbox.click();
-        selectGPUType.click();
-        selectTESLAT4.click();
+        selectGPUType("NVIDIA Tesla T4");
 
-        selectSSD.click();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        select2x375GB.click();
+        selectLocalSSD("2x375 GB");
 
-        datacenterLocationSelect.click();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        switch (user.getRegion()) {
-            case "Europe":
-                selectEU3.click();
-                break;
-            case "United States":
-                selectUSWEST2.click();
-                break;
-            default:
-                selectEUWEST1.click();
+        selectDataCenter("Frankfurt");
+//        datacenterLocationSelect.click();
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        switch (user.getRegion()) {
+//            case "Europe":
+//                selectEU3.click();
+//                break;
+//            case "United States":
+//                selectUSWEST2.click();
+//                break;
+//            default:
+//                selectEUWEST1.click();
+//
+//        }
 
-        }
-
-        committedUsageSelect.click();
-        selectOneYear.click();
 
         estimateButton.click();
         emailEstimateButton.click();
