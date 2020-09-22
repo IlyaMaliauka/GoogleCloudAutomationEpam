@@ -22,9 +22,9 @@ public class FakeMailHomePage {
     @FindBy(id = "myFrame")
     private WebElement secondFrame;
 
-    @FindBy(xpath = "/html/body/div[1]/div/div/div[2]/div[1]/form/div[2]")
+    @FindBy(xpath = "//div[@class='input-box-col hidden-xs-sm']")
     private WebElement copyEmailButton;
-    //*[@id='copy_address']/span
+
     @FindBy(xpath = "//input[@ng-model='emailQuote.user.email']")
     private WebElement emailInput;
 
@@ -59,7 +59,6 @@ public class FakeMailHomePage {
         ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(1));
         copyEmailButton.click();
-        logger.info("copy email button clicked");
         driver.switchTo().window(tabs2.get(0));
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
 

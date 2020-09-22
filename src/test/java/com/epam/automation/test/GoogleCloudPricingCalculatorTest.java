@@ -7,7 +7,6 @@ import com.epam.automation.page.GoogleCloudHomePage;
 import com.epam.automation.service.UserCreator;
 import com.epam.automation.util.TestListener;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -41,9 +40,9 @@ public class GoogleCloudPricingCalculatorTest {
     }
 
 
-//        @AfterMethod(alwaysRun = true)
-//    public void browserTearDown() {
-//            DriverSingleton.closeDriver();
-//        }
+        @AfterMethod(alwaysRun = true)
+    public void browserTearDown() {
+            DriverSingleton.closeDriver();
+        }
 
 }
