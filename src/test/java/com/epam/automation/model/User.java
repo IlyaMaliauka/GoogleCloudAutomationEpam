@@ -4,24 +4,24 @@ import java.util.Objects;
 
 public class User {
 
-    private String region;
+    private String localSSD;
     private String desiredInstancesNumber;
     private String firstName;
     private String lastName;
 
-    public User(String region, String desiredInstancesNumber, String firstName, String lastName) {
-        this.region = region;
+    public User(String localSSD, String desiredInstancesNumber, String firstName, String lastName) {
+        this.localSSD = localSSD;
         this.desiredInstancesNumber = desiredInstancesNumber;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public String getRegion() {
-        return region;
+    public String getLocalSSD() {
+        return localSSD;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setLocalSSD(String localSSD) {
+        this.localSSD = localSSD;
     }
 
     public String getDesiredInstancesNumber() {
@@ -51,7 +51,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "region='" + region + '\'' +
+                "region='" + localSSD + '\'' +
                 ", desiredInstancesNumber='" + desiredInstancesNumber + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -63,7 +63,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(region, user.region) &&
+        return Objects.equals(localSSD, user.localSSD) &&
                 Objects.equals(desiredInstancesNumber, user.desiredInstancesNumber) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName);
@@ -71,6 +71,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(region, desiredInstancesNumber, firstName, lastName);
+        return Objects.hash(localSSD, desiredInstancesNumber, firstName, lastName);
     }
 }

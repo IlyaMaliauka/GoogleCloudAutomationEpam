@@ -29,18 +29,6 @@ public class PricingCalculatorPage {
     @FindBy(xpath = "//md-checkbox[@aria-label='Add GPUs']")
     private WebElement addGPUsCheckbox;
 
-    @FindBy(xpath = "//md-select[@ng-model='listingCtrl.computeServer.location']")
-    private WebElement datacenterLocationSelect;
-
-    @FindBy(xpath = "//*[@id='select_option_204']")
-    private WebElement selectEU3;
-
-    @FindBy(xpath = "//*[@id='select_option_199']")
-    private WebElement selectUSWEST2;
-
-    @FindBy(xpath = "//*[@id='select_option_202']")
-    private WebElement selectEUWEST1;
-
     @FindBy(xpath = "//button[@aria-label='Add to Estimate']")
     private WebElement estimateButton;
 
@@ -53,10 +41,6 @@ public class PricingCalculatorPage {
         PageFactory.initElements(driver, this);
     }
 
-    private void selectDataCenter(String region) {
-        specifyOptionFromDropDownList(driver.findElement(By.xpath("//md-select[@ng-model='listingCtrl.computeServer.location']")), region);
-    }
-
     private void selectGPUType(String GPUType) {
         specifyOptionFromDropDownList(driver.findElement(By.xpath("//*[@id='select_value_label_371']")), GPUType);
     }
@@ -65,8 +49,8 @@ public class PricingCalculatorPage {
         specifyOptionFromDropDownList(driver.findElement(By.xpath("//md-select[@ng-model='listingCtrl.computeServer.instance']")), machineType);
     }
 
-    private void selectLocalSSD(String localSSD) {
-        specifyOptionFromDropDownList(driver.findElement(By.id("select_value_label_192")), localSSD);
+    private void selectLocalSSD(User user) {
+        specifyOptionFromDropDownList(driver.findElement(By.id("select_value_label_192")), user.getLocalSSD());
     }
 
     private void specifyOptionFromDropDownList(WebElement dropDownList, String option) {
@@ -91,37 +75,13 @@ public class PricingCalculatorPage {
     public FakeMailHomePage estimatePricing(User user) {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
         driver.switchTo().frame(firstFrame).switchTo().frame(secondFrame);
-
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("input_60")));
         numberOfInstancesInput.sendKeys(user.getDesiredInstancesNumber());
        selectMachineType("n1-standard-8");
-
         addGPUsCheckbox.click();
         selectGPUType("NVIDIA Tesla T4");
-
-        selectLocalSSD("2x375 GB");
-
-        selectDataCenter("Frankfurt");
-//        datacenterLocationSelect.click();
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        switch (user.getRegion()) {
-//            case "Europe":
-//                selectEU3.click();
-//                break;
-//            case "United States":
-//                selectUSWEST2.click();
-//                break;
-//            default:
-//                selectEUWEST1.click();
-//
-//        }
-
-
+        selectLocalSSD(user);
         estimateButton.click();
         emailEstimateButton.click();
         logger.info("Google Cloud Service pricing calculated");
