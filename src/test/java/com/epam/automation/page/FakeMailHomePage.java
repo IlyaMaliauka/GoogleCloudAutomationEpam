@@ -76,6 +76,7 @@ public class FakeMailHomePage {
         new WebDriverWait(driver, 60)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Google Cloud Platform Price Estimate']")));
         emailWithPricingButton.click();
+        jse.executeScript("window.scrollBy(0,350)");
 
         return this;
     }
